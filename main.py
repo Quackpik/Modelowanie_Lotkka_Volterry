@@ -27,6 +27,9 @@ for i in range(1, len(t)):
     x.append(x[i - 1] + dx * dt)
     y.append(y[i - 1] + dy * dt)
 
+#obliczenie sumy populacji w czasie
+suma_populacji = np.array(x) + np.array(y)
+
 
 if __name__ == '__main__':
     plt.plot(t, x)
