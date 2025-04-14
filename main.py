@@ -32,12 +32,15 @@ suma_populacji = np.array(x) + np.array(y)
 
 
 if __name__ == '__main__':
+    plt.subplot(2, 1, 1)
     plt.plot(t, x)
     plt.plot(t, y)
     plt.xlabel('Czas')
     plt.ylabel('Wielkość Populacji')
     plt.legend(('Ofiary', 'Drapieżcy'))
     plt.title('ofiary drapieżcy')
+    plt.subplot(2, 1, 2)
+    plt.plot(x, y)
     plt.show()
 
 # TODO: paramtetryzajca i obliczanie odległości Gausowskiej
