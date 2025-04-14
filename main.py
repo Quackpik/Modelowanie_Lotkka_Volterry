@@ -2,10 +2,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # Globalne stałe
-dt = .0001      # krok czasu
+dt = .0001                    # krok czasu
 czas = 100      # czas symulacji
 t = np.arange(0, czas, dt) # wektor czasowy
-
 x = [100]       # wektor liczby ofiar
 y = [20]        # wektor liczby drapieżców
 
