@@ -1,14 +1,25 @@
 import numpy as np
+import random
+
+
+def StochasticTerm(amp=0.1):
+    rand = amp * np.random.uniform(-1, 1)
+    if np.abs(rand) > 1:
+        return 0
+    else:
+        return rand
+
 
 def simulate_predator_prey(
-    dt=0.0001,
-    total_time=100,
-    prey_init=100,
-    predator_init=20,
-    A=1.0,
-    B=0.1,
-    C=0.5,
-    D=0.1
+        dt=0.001,
+        total_time=100,
+        prey_init=100,
+        predator_init=20,
+        A=1.0,
+        B=0.1,
+        C=0.5,
+        D=0.01,
+        stc=True
 ):
     """
     Symuluje model drapieżnik-ofiara (Lotki-Volterry) z podanymi parametrami.
@@ -30,12 +41,20 @@ def simulate_predator_prey(
     - suma_populacji: łączna populacja w czasie
     """
     t = np.arange(0, total_time, dt)
-    x = [prey_init]
-    y = [predator_init]
+    if stc:
+        x = [C / D]
+        y = [A / B]
+    else:
+        x = [prey_init]
+        y = [predator_init]
 
     for i in range(1, len(t)):
-        dx = x[i - 1] * (A - B * y[i - 1])
-        dy = -y[i - 1] * (C - D * x[i - 1])
+        if stc:
+            dx = x[i - 1] * ((A + StochasticTerm()) - (B + StochasticTerm()) * y[i - 1])
+            dy = -y[i - 1] * ((C + StochasticTerm()) - (D + StochasticTerm()) * x[i - 1])
+        else:
+            dx = x[i - 1] * (A - B * y[i - 1])
+            dy = -y[i - 1] * (C - D * x[i - 1])
 
         x.append(x[i - 1] + dx * dt)
         y.append(y[i - 1] + dy * dt)

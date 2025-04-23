@@ -14,7 +14,8 @@ if __name__ == '__main__':
     plt.legend(('Ofiary', 'Drapieżcy'))
     plt.title('ofiary drapieżcy')
     plt.subplot(2, 1, 2)
-    plt.plot(x, y)
+    plt.plot(x, y, zorder=1)
+    plt.scatter(0.5 / 0.01, 1 / 0.1, c='red', s=10, zorder=2)
     plt.show()
 
 # TODO: paramtetryzajca i obliczanie odległości Gausowskiej
