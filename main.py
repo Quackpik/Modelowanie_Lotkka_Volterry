@@ -43,6 +43,10 @@ def plot_graphs():
 
 root = tk.Tk()
 root.title("Lotkka-Voltery Model")
+screen_width = root.winfo_screenwidth()
+screen_height = root.winfo_screenheight()
+root.geometry(f"{screen_width}x{screen_height}")
+root.state('zoomed')
 
 # Ramka na wpisy
 input_frame = ttk.Frame(root)
