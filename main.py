@@ -4,6 +4,7 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
 from simulation import simulate_predator_prey
+from find_peaks import find_distance
 
 t, x, y, suma_populacji = simulate_predator_prey()
 
@@ -38,6 +39,18 @@ def plot_graphs():
     ax2.set_xlabel('ofiary')
     ax2.set_title("Przestrzeń fazowa")
 
+    label_s.config(text=f"S ({c / d:.2f},{a / b:.2f}) ")
+
+    max_prey = max(x)
+    max_predator = max(y)
+    label_max_prey.config(text=f"Maks. ofiary: {max_prey:.2f}")
+    label_max_predator.config(text=f"Maks. drapieżcy: {max_predator:.2f}")
+
+    time_prey = find_distance(t, x)
+    label_time_prey.config(text=f"Czas (ofiary): {time_prey:.2f}")
+
+    time_predator = find_distance(t, y)
+    label_time_predator.config(text=f"Czas (drapieżcy): {time_predator:.2f}")
     canvas.draw()
 
 
@@ -92,6 +105,24 @@ ax2 = fig.add_subplot(122)  # 1 rząd, 2 kolumny, drugi wykres
 
 canvas = FigureCanvasTkAgg(fig, master=root)
 canvas.get_tk_widget().pack()
+
+# Dodaj etykiety do wyświetlania wartości c / d i a / b obok przycisku
+label_s = ttk.Label(input_frame, text="-")
+label_s.grid(row=1, column=5, padx=10)
+
+# Dodaj etykiety do wyświetlania maksymalnych wartości
+label_max_prey = ttk.Label(input_frame, text="Maks. ofiary: -")
+label_max_prey.grid(row=2, column=5, padx=10)
+
+label_max_predator = ttk.Label(input_frame, text="Maks. drapieżcy: -")
+label_max_predator.grid(row=2, column=6, padx=10)
+
+# Dodaj etykiety do wyświetlania czasu od minimum do maksimum
+label_time_prey = ttk.Label(input_frame, text="Czas (ofiary): -")
+label_time_prey.grid(row=3, column=5, padx=10)
+
+label_time_predator = ttk.Label(input_frame, text="Czas (drapieżcy): -")
+label_time_predator.grid(row=3, column=6, padx=10)
 
 if __name__ == '__main__':
     plot_graphs()
