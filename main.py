@@ -5,6 +5,7 @@ from tkinter import ttk
 from tkinter import messagebox
 from simulation import simulate_predator_prey
 from find_peaks import find_distance
+import numpy as np
 
 t, x, y, suma_populacji = simulate_predator_prey()
 
@@ -22,7 +23,8 @@ def plot_graphs():
     checkbox_value1 = checkbox_var1.get()
 
     t, x, y, suma_populacji = simulate_predator_prey(A=a, B=b, C=c, D=d, stc=checkbox_value, hides=checkbox_value1)
-
+    print(np.max(x))
+    print(x)
     ax1.clear()
     ax2.clear()
 
@@ -41,16 +43,18 @@ def plot_graphs():
 
     label_s.config(text=f"S ({c / d:.2f},{a / b:.2f}) ")
 
-    max_prey = max(x)
-    max_predator = max(y)
+    max_prey = np.max(x)
+    max_predator = np.max(y)
     label_max_prey.config(text=f"Maks. ofiary: {max_prey:.2f}")
     label_max_predator.config(text=f"Maks. drapieżcy: {max_predator:.2f}")
+    try:
+        time_prey = find_distance(t, x)
+        label_time_prey.config(text=f"Czas (ofiary): {time_prey:.2f}")
 
-    time_prey = find_distance(t, x)
-    label_time_prey.config(text=f"Czas (ofiary): {time_prey:.2f}")
-
-    time_predator = find_distance(t, y)
-    label_time_predator.config(text=f"Czas (drapieżcy): {time_predator:.2f}")
+        time_predator = find_distance(t, y)
+        label_time_predator.config(text=f"Czas (drapieżcy): {time_predator:.2f}")
+    except:
+        messagebox.showerror("Błąd", "jakiś błąd na razie idk")
     canvas.draw()
 
 
