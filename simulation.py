@@ -10,7 +10,7 @@ def StochasticTerm(amp=0.1):
         return rand
 
 def hide():
-    return np.random.randint(1, 10)
+    return np.random.randint(1, 30)
 
 
 def simulate_predator_prey(
@@ -60,8 +60,9 @@ def simulate_predator_prey(
             dx = x[i - 1] * (A - B * (y[i - 1] - hide()))
             dy = -y[i - 1] * (C - D * x[i - 1])
         elif stc and hides:
-            dx = x[i - 1] * ((A + StochasticTerm()) - (B + StochasticTerm()) * (y[i - 1] - hide()))
-            dy = -y[i - 1] * ((C + StochasticTerm()) - (D + StochasticTerm()) * x[i - 1])
+            h = hide()
+            dx = x[i - 1] * ((A + StochasticTerm()) - (B + StochasticTerm()) * (y[i - 1] - h))
+            dy = -(y[i - 1] - h) * ((C + StochasticTerm()) - (D + StochasticTerm()) * x[i - 1])
         else:
             dx = x[i - 1] * (A - B * y[i - 1])
             dy = -y[i - 1] * (C - D * x[i - 1])
