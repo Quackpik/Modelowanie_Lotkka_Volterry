@@ -21,11 +21,18 @@ a = np.arange(0.5, 3, 0.1)
 if __name__ == '__main__':
     times_prey = []
     times_predator = []
+    maxes_prey = []
+    maxes_predator = []
     for num in a:
         t, x, y, suma_populacji = simulate_predator_prey(A=num)
         times_prey.append(find_distance(t, x))
         times_predator.append(find_distance(t, y))
+        maxes_prey.append(np.max(x))
+        maxes_predator.append(np.max(y))
     plt.plot(a, times_prey)
     plt.plot(a, times_predator)
     plt.show()
-    print(a)
+
+    plt.plot(a, maxes_prey)
+    plt.plot(a, maxes_predator)
+    plt.show()
