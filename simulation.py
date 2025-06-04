@@ -1,5 +1,5 @@
 import numpy as np
-import random
+from scipy.integrate import solve_ivp
 
 
 def StochasticTerm(amp=0.1):
@@ -10,12 +10,12 @@ def StochasticTerm(amp=0.1):
         return rand
 
 def hide():
-    return np.random.randint(1, 30)
+    return 30
 
 
 def simulate_predator_prey(
         dt=0.0001,
-        total_time=50,
+        total_time=100,
         prey_init=100,
         predator_init=20,
         A=1.0,
@@ -46,32 +46,40 @@ def simulate_predator_prey(
     """
     t = np.arange(0, total_time, dt)
     if stc:
-        x = [C / D]
-        y = [A / B]
+        x0 = C / D
+        y0 = A / B
     else:
-        x = [prey_init]
-        y = [predator_init]
+        x0 = prey_init
+        y0 = predator_init
 
-    for i in range(1, len(t)):
-        if stc and not(stc and hides):
-            dx = x[i - 1] * ((A + StochasticTerm()) - (B + StochasticTerm()) * y[i - 1])
-            dy = -y[i - 1] * ((C + StochasticTerm()) - (D + StochasticTerm()) * x[i - 1])
-        elif hides and not(stc and hides):
-            dx = x[i - 1] * (A - B * (y[i - 1] - hide()))
-            dy = -y[i - 1] * (C - D * x[i - 1])
+    def lotka_volterra(t, z):
+        x, y = z
+        if stc and not hides:
+            dxdt = x * ((A + StochasticTerm()) - (B + StochasticTerm()) * y)
+            dydt = -y * ((C + StochasticTerm()) - (D + StochasticTerm()) * x)
+        elif hides and not stc:
+            h = hide()
+            dxdt = x * (A - B * (y - h))
+            dydt = -y * (C - D * x)
         elif stc and hides:
             h = hide()
-            dx = x[i - 1] * ((A + StochasticTerm()) - (B + StochasticTerm()) * (y[i - 1] - h))
-            dy = -(y[i - 1] - h) * ((C + StochasticTerm()) - (D + StochasticTerm()) * x[i - 1])
+            dxdt = x * ((A + StochasticTerm()) - (B + StochasticTerm()) * (y - h))
+            dydt = -(y - h) * ((C + StochasticTerm()) - (D + StochasticTerm()) * x)
         else:
-            dx = x[i - 1] * (A - B * y[i - 1])
-            dy = -y[i - 1] * (C - D * x[i - 1])
+            dxdt = x * (A - B * y)
+            dydt = -y * (C - D * x)
+        return [dxdt, dydt]
 
-        x.append(x[i - 1] + dx * dt)
-        y.append(y[i - 1] + dy * dt)
+    z0 = np.array([x0, y0], dtype=float)
 
-    x = np.array(x)
-    y = np.array(y)
+    t_span = (0, total_time)
+    t_eval = np.linspace(*t_span, 1000)
+
+    sol = solve_ivp(lotka_volterra, t_span, z0, t_eval=t_eval, method='RK45')
+
+    t = sol.t
+    x = sol.y[0]
+    y = sol.y[1]
     suma_populacji = x + y
 
     return t, x, y, suma_populacji

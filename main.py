@@ -23,8 +23,7 @@ def plot_graphs():
     checkbox_value1 = checkbox_var1.get()
 
     t, x, y, suma_populacji = simulate_predator_prey(A=a, B=b, C=c, D=d, stc=checkbox_value, hides=checkbox_value1)
-    print(np.max(x))
-    print(x)
+
     ax1.clear()
     ax2.clear()
 
